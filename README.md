@@ -64,7 +64,7 @@ Here is the code which implements this method. You can browse and download every
 ```python
 from PIL import Image
 
-def ocr(im, threshold = 200, aplhabet = "0123456789abcdef"):
+def ocr(im, threshold = 200, alphabet = "0123456789abcdef"):
     img = Image.open(im)
     img = img.convert("RGB")
     box = (8, 8, 58, 18)
@@ -101,14 +101,14 @@ def ocr(im, threshold = 200, aplhabet = "0123456789abcdef"):
                 letter = letters.crop(box)
                 t = p(img, letter);
                 print counter, x, t
-                letterlist.append((t[0],aplhabet[counter], t[1]))
+                letterlist.append((t[0],alphabet[counter], t[1]))
             old_x = x
             counter = counter + 1
 
     box = (old_x+1, 0, 140, 10)
     letter = letters.crop(box)
     t = p(img, letter)
-    letterlist.append((t[0],aplhabet[counter], t[1]))
+    letterlist.append((t[0],alphabet[counter], t[1]))
 
     t = sorted(letterlist)
     t = t[0:5] # 5-letter captcha
