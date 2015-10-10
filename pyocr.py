@@ -1,7 +1,7 @@
 from PIL import Image
 import sys
 
-def ocr(im, threshold = 200, mask = "letters.bmp", aplhabet = "0123456789abcdef"):	
+def ocr(im, threshold = 200, mask = "letters.bmp", alphabet = "0123456789abcdef"):
 	img = Image.open(im)
 	img = img.convert("RGB")
 	box = (8, 8, 58, 18)
@@ -21,16 +21,16 @@ def ocr(im, threshold = 200, mask = "letters.bmp", aplhabet = "0123456789abcdef"
 		for x in xrange(img.size[0]-letter.size[0]):
 			sum = 0
 			for i in xrange(letter.size[0]):
-			    for j in xrange(letter.size[1]):
+				for j in xrange(letter.size[1]):
 					sum = sum + abs(A[x+i, j][0] - B[i, j][0])
 			if sum < mx :
 				mx = sum
 				max_x = x
 		return (mx, max_x)
-	
+
 	# Clean the background noise, if color != black, then set to white.
 	for y in xrange(img.size[1]):
-	    for x in xrange(img.size[0]):
+		for x in xrange(img.size[0]):
 			if not(pixdata[x, y][0] > threshold and pixdata[x, y][1] > threshold and pixdata[x, y][2] > threshold):
 				pixdata[x, y] = (0, 0, 0, 255)
 			else:
@@ -52,14 +52,14 @@ def ocr(im, threshold = 200, mask = "letters.bmp", aplhabet = "0123456789abcdef"
 				box = (old_x+1, 0, x, 10)
 				letter = letters.crop(box)
 				t = test_letter(img, letter);
-				letterlist.append((t[0],aplhabet[counter], t[1]))
+				letterlist.append((t[0],alphabet[counter], t[1]))
 			old_x = x
 			counter = counter + 1
-		
+
 	box = (old_x+1, 0, 140, 10)
 	letter = letters.crop(box)
 	t = test_letter(img, letter)
-	letterlist.append((t[0],aplhabet[counter], t[1]))
+	letterlist.append((t[0],alphabet[counter], t[1]))
 
 	t = sorted(letterlist)
 	t = t[0:5] # 5-letter captcha
