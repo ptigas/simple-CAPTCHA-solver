@@ -9,9 +9,11 @@ def decoder(
         alphabet="0123456789abcdef"):
 
     img = Image.open(im)
-    img = img.convert("RGB")
-    box = (8, 8, 58, 18)
-    img = img.crop(box)
+    img = img.convert("RGB")	
+
+    # Commenting the boxing by doing a vertical loop in the test_letter function
+    #box = (8, 8, 58, 18)
+    #img = img.crop(box)
     pixdata = img.load()
 
     # open the mask
@@ -25,13 +27,15 @@ def decoder(
         max_x = 0
         x = 0
         for x in range(img.size[0] - letter.size[0]):
-            _sum = 0
-            for i in range(letter.size[0]):
-                for j in range(letter.size[1]):
-                    _sum = _sum + abs(A[x + i, j][0] - B[i, j][0])
-            if _sum < mx:
-                mx = _sum
-                max_x = x
+            # Adding the below y loop for full span search
+            for y in range(img.size[1] - letter.size[1]):
+                _sum = 0
+                for i in range(letter.size[0]):
+                    for j in range(letter.size[1]):
+                        _sum = _sum + abs(A[x + i, y + j][0] - B[i, j][0])
+                if _sum < mx:
+                    mx = _sum
+                    max_x = x
         return mx, max_x
 
     # Clean the background noise, if color != white, then set to black.
